@@ -35,6 +35,9 @@ namespace Tetris_Application__wpf_
         };
 
         private readonly Image[,] imageControls;
+        private readonly int maxDelay = 1000;
+        private readonly int minDelay = 75;
+        private readonly int delayDecrease = 15;
 
         private GameState gameState = new GameState();
 
@@ -120,7 +123,7 @@ namespace Tetris_Application__wpf_
 
             foreach (Position p in block.TilePositions()) 
             {
-                imageControls[p.Row + dropDistance,p.Column].Opacity = 0.25;
+                imageControls[p.Row + dropDistance,p.Column].Opacity = 0.15;
                 imageControls[p.Row + dropDistance, p.Column].Source = tileImages[block.Id];
             }
         }
@@ -141,6 +144,7 @@ namespace Tetris_Application__wpf_
 
             while (!gameState.GameOver) 
             {
+                int delay = Math.Max(minDelay, maxDelay - (gameState.Score * delayDecrease)); 
                 await Task.Delay(500);
                 gameState.MoveBlockDown();
                 Draw(gameState);
